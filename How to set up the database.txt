@@ -1,0 +1,7 @@
+This project requires having mySQL DBMS installed on the device. The version we had installed is 5.7.19 You can find it on https://dev.mysql.com/downloads/installer/
+
+** Most importantly, choose to install MySQL Server and MySQL Shell
+** Go to DBConnection.java and configure DB_USER and DB_PASSWORD to the user name and password of your SQL server
+** Create a new database called "workshop2"
+** Import "workshop2.sql" dump file located in our project folder into "workshop2" database
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
