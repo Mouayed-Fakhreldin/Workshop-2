@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 
 /**
- * @author kuku
- * A class to represent a member at the yacht club
+ * @author Mouayed Fakhreldin
+ * @author Abdilrahman Duale
+ * @author Genet Shiferaw
+ * A data model class representing a member at the yacht club
  */
 public class Member {
 	private String name;
@@ -15,7 +17,7 @@ public class Member {
 	private boolean stored;
 
 	/**
-	 * Creates a member object with an auto-generated unique ID.
+	 * Creates a member object.
 	 * @param name Member's name
 	 * @param personalNumber Member's personal number
 	 * @throws IllegalArgumentException in these cases.<br> - if the name or personal nr are null or empty.<br> - if the name has too many spaces.<br> - if the personal number is not a 10-digit number
@@ -31,7 +33,7 @@ public class Member {
 	}
 
 	/**
-	 * 
+	 * Gets the member's name
 	 * @return Member's name.
 	 */
 	public String getName() {
@@ -57,6 +59,11 @@ public class Member {
 		
 	}
 	
+	/**
+	 * Checks if a string is valid to use as a member's name. Name can not be empty and can not contain too many spaces
+	 * @param name the name to check if it's valid
+	 * @return true if the string is valid as a member's name, false otherwise.
+	 */
 	public static boolean checkName(String name) {
 		if (name == null || name.length() == 0)
 			return false;
@@ -82,7 +89,7 @@ public class Member {
 	}
 
 	/**
-	 * 
+	 * Gets the member's personal number.
 	 * @return Member's personal number
 	 */
 	public String getPersonalNumber() {
@@ -104,7 +111,7 @@ public class Member {
 	}
 
 	/**
-	 * 
+	 * Gets the member's ID. If the member has not been assigned an ID, the ID will be 0
 	 * @return Member's unique ID
 	 */
 	public int getMemberId() {
@@ -145,8 +152,8 @@ public class Member {
 	}
 
 	/**
-	 * 
-	 * @return and ArrayList of the member's boats
+	 * Gets the member's registered boats.
+	 * @return an ArrayList of the member's boats
 	 */
 	public ArrayList<Boat> getBoatList() {
 		return boatList;

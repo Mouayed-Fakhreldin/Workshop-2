@@ -2,6 +2,13 @@ package model;
 
 import java.sql.*;
 
+/**
+ * A class that connects the java code to the SQL database to facilitate Queries.
+ * @author Mouayed Fakhreldin
+ * @author Abdilrahman Duale
+ * @author Genet Shiferaw
+ *
+ */
 public class DBConnection {
 	
 	private static final String DB_URL = "jdbc:mysql://localhost/workshop2?useSSL=false";
@@ -24,6 +31,12 @@ public class DBConnection {
 		}
 	}
 	
+	/**
+	 * Executes a query and returns a the results
+	 * @param query The SQL query
+	 * @return the result set of the query execution
+	 * @throws SQLException
+	 */
 	public static ResultSet executeQuery(String query) throws SQLException {
 		
 		if (connection == null || statement == null)
@@ -35,6 +48,11 @@ public class DBConnection {
 		
 	}
 	
+	/**
+	 * Executes an update query.
+	 * @param query the SQL querry
+	 * @throws SQLException
+	 */
 	public static void execute(String query) throws SQLException {
 		if (connection == null || statement == null)
 			initialize();

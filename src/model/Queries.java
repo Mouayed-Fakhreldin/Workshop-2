@@ -4,6 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * A class for all the queries for storing and retreiving members and boats from the database.
+ * @author Mouayed Fakhreldin
+ * @author Abdilrahman Duale
+ * @author Genet Shiferaw.
+ *
+ */
 public class Queries {
 
 	
@@ -195,8 +202,12 @@ public class Queries {
 
 	}
 
-	// Stores a boat in the database. 
-	public static void storeBoat(Boat boat) {
+	/**
+	 * Stores a boat in the database.
+	 * @param boat the boat to be stored
+	 * @return true if the boat has been successfully stored, false otherwise.
+	 */
+	public static boolean storeBoat(Boat boat) {
 
 		try {
 			String s = String.format("INSERT INTO boats (type, length, owner) VALUES ('%S', %f, %d);",
@@ -210,10 +221,12 @@ public class Queries {
 			rs.close();
 			
 			boat.setStored(true);
+			return true;
 		}
 
 		catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 
 	}

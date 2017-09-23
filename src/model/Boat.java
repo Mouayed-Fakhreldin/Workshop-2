@@ -2,8 +2,10 @@ package model;
 
 
 /**
- * A class representing a boat in the yacht club
- * @author Administrator
+ * A data model class representing a boat in the yacht club
+ * @author Mouayed Fakhreldin
+ * @author Abdilrahman Duale
+ * @author Genet Shiferaw
  *
  */
 public class Boat {
@@ -23,7 +25,7 @@ public class Boat {
 	
 	/**
 	 * Creates a Boat object.
-	 * @param owner The boat's owner
+	 * @param owner The boat's owner 
 	 * @param type The boat's type
 	 * @param length Boat's length
 	 * @throws IllegalArgumentException if owner or type is null or if length is less than 1
@@ -41,15 +43,22 @@ public class Boat {
 		this.owner = owner;
 		
 		setStored(false);
-		
 	}
 	
 	
+	/**
+	 * Gets the Boat's ID
+	 * @return the boat's ID
+	 */
 	public int getBoatId() {
 		return boatId;
 	}
 
 
+	/**
+	 * Sets the ID for the boat
+	 * @param boatId 
+	 */
 	void setBoatId(int boatId) {
 		this.boatId = boatId;
 	}
@@ -73,7 +82,7 @@ public class Boat {
 	
 	/**
 	 * Sets the type of the boat
-	 * @param type
+	 * @param type Type of the boat.
 	 * @throws IllegalArgumentException if the type is null.
 	 */
 	public void setType(BoatType type) {
@@ -105,7 +114,7 @@ public class Boat {
 	/**
 	 * A flag denoting whether the boat is stored in the database or not. For the boat
 	 * to be stored in the database, it needs to be added to the member's boat list and
-	 * then call Queries.updateMemberStorage()
+	 * then stored in the SQL database as well.
 	 * @return true if the boat is stored in the database, false otherwise.
 	 */
 	public boolean isStored() {
