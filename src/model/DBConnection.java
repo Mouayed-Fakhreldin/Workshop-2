@@ -35,7 +35,7 @@ public class DBConnection {
 	 * Executes a query and returns a the results
 	 * @param query The SQL query
 	 * @return the result set of the query execution
-	 * @throws SQLException
+	 * @throws SQLException if the SQL connection fails
 	 */
 	public static ResultSet executeQuery(String query) throws SQLException {
 		
@@ -51,7 +51,7 @@ public class DBConnection {
 	/**
 	 * Executes an update query.
 	 * @param query the SQL querry
-	 * @throws SQLException
+	 * @throws SQLException if the SQL connection fails
 	 */
 	public static void execute(String query) throws SQLException {
 		if (connection == null || statement == null)

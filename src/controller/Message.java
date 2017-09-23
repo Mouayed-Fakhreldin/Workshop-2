@@ -23,7 +23,7 @@ public class Message {
 
 	/**
 	 * Sets the input error message.
-	 * @param message
+	 * @param message the validation message
 	 */
 	public void setMessage(String message) {
 		this.message = message + "\n--------------";

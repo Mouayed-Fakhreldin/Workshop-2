@@ -57,7 +57,7 @@ public class ViewCreateUpdateBoat {
 	/**
 	 * Gets the list of boats registered for a certain member 
 	 * @param selectedPersonalNumber The personal number of the owner of the boats
-	 * @return
+	 * @return list of boats as a string array
 	 */
 	public static String[] getBoats(String selectedPersonalNumber) {
 		

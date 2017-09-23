@@ -36,9 +36,18 @@ public class UtilClass {
 	 * @param s The output that will be displayed to the user (so the user will know what to input)
 	 * @param booleanChecker A method object with the structure checkSth(String input, Message validationMessage)
 	 * @return the validated input
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
+	 * 
+	 * @throws IllegalAccessException if this Method object is enforcing Java language access 
+	 * control and the underlying method is inaccessible.
+	 * 
+	 * @throws IllegalArgumentException if the method is an instance method and the specified 
+	 * object argument is not an instance of the class or interface declaring the underlying 
+	 * method (or of a subclass or implementor thereof); if the number of actual and formal 
+	 * parameters differ; if an unwrapping conversion for primitive arguments fails; or if, 
+	 * after possible unwrapping, a parameter value cannot be converted to the corresponding 
+	 * formal parameter type by a method invocation conversion.
+	 * 
+	 * @throws InvocationTargetException  if the underlying method throws an exception.
 	 */
 	static String validatedInput(String s, Method booleanChecker) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		

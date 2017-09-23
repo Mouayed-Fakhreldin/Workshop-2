@@ -57,7 +57,7 @@ public class Boat {
 
 	/**
 	 * Sets the ID for the boat
-	 * @param boatId 
+	 * @param boatId the boat's ID
 	 */
 	void setBoatId(int boatId) {
 		this.boatId = boatId;

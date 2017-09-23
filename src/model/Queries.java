@@ -95,7 +95,7 @@ public class Queries {
 	 * Checks if a member can be stored in the database. A member can be stored in the database
 	 * if there's not stored members with the same personal member (i.e database doesn't allow
 	 * duplicate personal numbers).
-	 * @param member The member to be checked 
+	 * @param personalNumber The personal number to be checked 
 	 * @return true if the member can be stored in the database, false otherwise.
 	 */
 	public static boolean checkPersonalNumber(String personalNumber) {
@@ -181,7 +181,7 @@ public class Queries {
 	/**
 	 * Stores the member's unstored boats. This method will only work if the member is 
 	 * already stored in the database.
-	 * @param member 
+	 * @param member Member whose boats list is to be updated
 	 * @return true if the member has been found in the database and the boats list updated, false otherwise.
 	 */
 	public static boolean updateMemberBoatStorage(Member member) {
@@ -324,7 +324,7 @@ public class Queries {
 	
 	/**
 	 * Gets all the boats owned by a member. 
-	 * @param member
+	 * @param member The member whose boats list is to be returned
 	 * @return a Boat[] array of all the member's boats or null if the member doesn't have any boats.
 	 */
 	public static Boat[] getMemberBoats(Member member) {
