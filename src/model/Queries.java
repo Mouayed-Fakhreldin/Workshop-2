@@ -3,6 +3,7 @@ package model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * A class for all the queries for storing and retreiving members and boats from the database.
@@ -210,9 +211,8 @@ public class Queries {
 	public static boolean storeBoat(Boat boat) {
 
 		try {
-			String s = String.format("INSERT INTO boats (type, length, owner) VALUES ('%S', %f, %d);",
+			String s = String.format(Locale.ROOT, "INSERT INTO boats (type, length, owner) VALUES ('%S', %f, %d);",
 					boat.getType().toString(), boat.getLength(), boat.getOwner().getMemberId());
-			System.out.println(s);
 			DBConnection.execute(s);
 
 			s = "SELECT LAST_INSERT_ID();";
@@ -422,7 +422,7 @@ public class Queries {
 			return false;
 		
 		try {
-			String s = String.format("UPDATE boats SET length = %f WHERE id = %d;", newLength, boat.getBoatId());
+			String s = String.format(Locale.ROOT, "UPDATE boats SET length = %f WHERE id = %d;", newLength, boat.getBoatId());
 			DBConnection.execute(s);
 			return true;
 			
