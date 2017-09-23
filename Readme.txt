@@ -4,4 +4,8 @@ This project requires having mySQL DBMS installed on the device. The version we 
 ** Go to DBConnection.java and configure DB_USER and DB_PASSWORD to the user name and password of your SQL server
 ** Create a new database called "workshop2"
 ** Import "workshop2.sql" dump file located in our project folder into "workshop2" database
+
+
+
+As for running the .java files, I trust that you are capable of doing that on your own. If you have Eclipse, then you can just import the whole project.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
