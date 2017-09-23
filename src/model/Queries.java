@@ -212,6 +212,7 @@ public class Queries {
 		try {
 			String s = String.format("INSERT INTO boats (type, length, owner) VALUES ('%S', %f, %d);",
 					boat.getType().toString(), boat.getLength(), boat.getOwner().getMemberId());
+			System.out.println(s);
 			DBConnection.execute(s);
 
 			s = "SELECT LAST_INSERT_ID();";
