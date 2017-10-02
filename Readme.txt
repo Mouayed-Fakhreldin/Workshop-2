@@ -16,7 +16,7 @@ Now for setting up the database:
 3) Type cd Link to where MYSQL Server 5.7 bin is located. For example: "cd C:\Program Files\MySQL\MySQL Server 5.7/bin". This will navigate to the bin folder.
 4) type "mysql -u root -p" without the quotes and then provide the root password
 5) type "create database workshop2;" without the quotes   
-6) type "exit" withouth the quotes
+6) type "exit" without the quotes
 7) type "mysql -u root -p workshop2 < workshop2.sql" to import the .sql dump file into the database and then provide the password
 **** Now the database is ready.
 ----------------------------------------------------------------
@@ -24,7 +24,7 @@ In order to run the jar file:
 1) Open winrar or winzip as administrator (preferably)
 2) Open the jar file included in our project folder ("jar.jar")
 3) Open model/UserAndPassword.txt using any text editor.
-4) Change the first line to "root" withouth the quotes
+4) Change the first line to "root" without the quotes
 5) Change the second line to the root's password you provided when installing MySQL
 6) Save the file and save the changes you made in the .jar file
 7) Go to Command line and navigate to the file's location. For example: "Cd c:\users\user\desktop\workshop2"
