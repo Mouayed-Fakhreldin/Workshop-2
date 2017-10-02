@@ -36,8 +36,12 @@ public class ViewCreateUpdateBoat {
 	 * @param selectedPersonalNumber The personal number of the owner of the boat
 	 * @param typeChoice The user's choice number for the boat type.
 	 * @param length The length of the boat (must be at least 1 meter).
+	 * @throws IllegalArgumentException if length is less than one.
 	 */
 	public static void addBoat(String selectedPersonalNumber, int typeChoice, double length) {
+		
+		if (length < 1)
+			throw new IllegalArgumentException("Length can only be equal or bigger than 1");
 		
 		Member member = Queries.getMember(selectedPersonalNumber);
 		typeChoice--;
@@ -118,8 +122,12 @@ public class ViewCreateUpdateBoat {
 	 * @param id The ID of the boat to be updated
 	 * @param newLength The new length of the boat 
 	 * @return true if the boat has been successfully updated, false otherwise.
+	 * @throws IllegalArgumentException if length is less than one.
 	 */
 	public static boolean updateBoatLength(int id, double newLength) {
+		
+		if (newLength <1)
+			throw new IllegalArgumentException("Length can only be equal to or bigger than 1");
 		
 		Boat boat = Queries.getBoat(id);
 		return Queries.updateBoatLength(boat, newLength);

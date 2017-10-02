@@ -2,6 +2,7 @@ package view;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Locale;
 
 import controller.Message;
 import controller.ViewCreateUpdateBoat;
@@ -16,6 +17,8 @@ import controller.ViewCreateUpdateBoat;
  *
  */
 public class Boats {
+	
+	private static final double maxLength = 10000;
 	
 	/**
 	 * Checks if Update Boats choice input is valid (Add a boat, Update boat's info, Remove
@@ -242,7 +245,14 @@ public class Boats {
 				System.out.print("Please Input boat length in meters: ");
 				String input = Main.scanner.nextLine();
 				length = Double.parseDouble(input);
-				notValidLength = false;
+				if (length >= 1 && length <= maxLength)
+					notValidLength = false;
+				
+				else if (length > maxLength)
+					System.out.println(String.format(Locale.ROOT, "Maximum length is %.1f meters !!!\n-------------------------", maxLength));
+				
+				else
+					System.out.println("Length can only be equal to or bigger than 1\n-------------------------");
 			} 
 			
 			catch (Exception e) {
@@ -364,7 +374,14 @@ public class Boats {
 					return;
 				
 				length = Double.parseDouble(input);
-				notValidLength = false;
+				if (length >= 1 && length <= maxLength)
+					notValidLength = false;
+				
+				else if (length > maxLength)
+					System.out.println(String.format(Locale.ROOT, "Maximum length is %.1f meters !!!\n-------------------------", maxLength));
+				
+				else
+					System.out.println("Length can only be equal to or bigger than 1\n-------------------------");
 			} 
 			
 			catch (Exception e) {

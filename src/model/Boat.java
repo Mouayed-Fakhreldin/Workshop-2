@@ -102,11 +102,11 @@ public class Boat {
 	/**
 	 * Sets the length of the boat.
 	 * @param length Length of the boat
-	 * @throws IllegalArgumentException if length is less than 1 (not positive).
+	 * @throws IllegalArgumentException if length is less than one.
 	 */
 	public void setLength(double length) {
 		if (length < 1)
-			throw new IllegalArgumentException("Length can only be positive.");
+			throw new IllegalArgumentException("Length can only be equal to or bigger than 1.");
 		this.length = length;
 	}
 	
