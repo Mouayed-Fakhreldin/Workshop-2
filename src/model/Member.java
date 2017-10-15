@@ -20,7 +20,7 @@ public class Member {
 	 * Creates a member object.
 	 * @param name Member's name
 	 * @param personalNumber Member's personal number
-	 * @throws IllegalArgumentException in these cases.<br> - if the name or personal nr are null or empty.<br> - if the name has too many spaces.<br> - if the personal number is not a 10-digit number
+	 * @throws IllegalArgumentException in these cases.<br> - if the name or personal nr are null or empty.<br> - if the name has too many spaces.<br> - If the name contains a character which is not alphabetic and not a space.<br> - if the personal number is not a 10-digit number
 	 */
 	public Member(String name, String personalNumber) throws IllegalArgumentException{
 		
@@ -44,49 +44,38 @@ public class Member {
 	/**
 	 * Set member's name
 	 * @param name Member's name
-	 * @throws IllegalArgumentException if the name is null, empty, or has too many spaces.
+	 * @throws IllegalArgumentException in these cases.<br> - if the name is null or empty.<br> - if the name has too many spaces.<br> - If the name contains a character which is not alphabetic and not a space.
 	 */
 	public void setName(String name) throws IllegalArgumentException {
 		
 		if (name == null || name.length() == 0)
-			throw new IllegalArgumentException("Member Name can not be empty");
+			throw new IllegalArgumentException("Member's Name can not be empty");
 		
-		else if(!checkName(name))
-				throw new IllegalArgumentException("Member names can not have too many space");
+		else {
+			int counter=1;
+			int anotherCounter = 0;
+			for(int i = 0;i<name.length();i++){
+				char c = name.charAt(i);
+				if (!Character.isAlphabetic(c) && c != ' ')
+					throw new IllegalArgumentException("Member's name can only contain alphabetic characters and spaces");
+				if(c==' '){
+					counter++;
+				}
+				else{
+					anotherCounter++;
+				}
+			}
+			 
+			
+			if(counter>anotherCounter)// Member names can not have too many space
+				throw new IllegalArgumentException("Member names can not have too many spaces");		
 		
-	
-		this.name = name;
-		
+			else
+				this.name = name;
+			
+		}		
 	}
 	
-	/**
-	 * Checks if a string is valid to use as a member's name. Name can not be empty and can not contain too many spaces
-	 * @param name the name to check if it's valid
-	 * @return true if the string is valid as a member's name, false otherwise.
-	 */
-	public static boolean checkName(String name) {
-		if (name == null || name.length() == 0)
-			return false;
-		
-		int counter=1;
-		int anotherCounter = 0;
-		for(int i = 0;i<name.length();i++){
-			char c = name.charAt(i);
-			if(c==' '){
-				counter++;
-			}
-			else{
-				anotherCounter++;
-			}
-		}
-		 
-		
-		if(counter>anotherCounter)// Member names can not have too many space
-			return false;		
-	
-		else
-			return true;
-	}
 
 	/**
 	 * Gets the member's personal number.
@@ -99,13 +88,16 @@ public class Member {
 	
 	// Sets a member's personal number. IllegalArgumentException is thrown if the personal number is not a 10-digit number.
 	private void setPersonalNumber(String personalNumber) throws IllegalArgumentException {
-		if(personalNumber == null || personalNumber.length() != 10)
-			throw new IllegalArgumentException("Personal nr should be 10-digits");
+		if(personalNumber == null || personalNumber.length() == 0)
+			throw new IllegalArgumentException("Personal nr can not be empty");
 		
 		for (int i=0; i<personalNumber.length(); i++) {
 			if (!Character.isDigit(personalNumber.charAt(i)))
 				throw new IllegalArgumentException("Personal nr can not contain non-digit characters");
 		}
+		
+		if (personalNumber.length() != 10)
+			throw new IllegalArgumentException("Personal number has to be a 10-digit number");
 		
 		this.personalNumber = personalNumber;
 	}

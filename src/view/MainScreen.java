@@ -12,26 +12,23 @@ import controller.Message;
  * @author Genet Shiferaw
  *
  */
-public class Main {
+public class MainScreen {
 
-	static Scanner scanner = new Scanner(System.in);
+	Scanner scanner = new Scanner(System.in);
 	@SuppressWarnings("rawtypes")
-	static Class[] args; 								// Contains the classes arguments for getMethod for all the Message validating methods [chechChoice() for example]
-	static String selectedPersonalNumber; 				// The selected member's personal number
-	static int selectedBoatId;							// The selected boat's ID 
+	final static Class[] args = new Class[] {String.class, Message.class}; 	// Contains the classes arguments for getMethod for all the Message validating methods [chechChoice() for example]
+	String selectedPersonalNumber; 											// The selected member's personal number
+	int selectedBoatId;														// The selected boat's ID 
+	private Boats boats;
+	private Members members;
 	
-	public static void main(String[] args) {
-		
-		Main.args = new Class[2];
-		Main.args[0] = String.class;
-		Main.args[1] = Message.class;
-		
-		mainScreen();
-		
+	public MainScreen() {
+		boats = new Boats(this);
+		members = new Members(this, boats);
 	}
 	
 	// Main menu
-	private static void mainScreen() {
+	public void displayMainScreen() {
 		
 		while (true) {
 			String s = "Welcome to Bla yacht club. Please choose an option:\n";
@@ -45,7 +42,7 @@ public class Main {
 			
 			// take validated choice input from the user
 			try {
-				 n = Integer.parseInt(UtilClass.validatedInput("Choice: ", UtilClass.class.getMethod("checkChoice", args)));
+				 n = Integer.parseInt(UtilClass.validatedInput("Choice: ", UtilClass.class.getMethod("checkChoice", args), scanner, null));
 			} 
 			
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -55,17 +52,17 @@ public class Main {
 			
 			switch (n) {
 			case 1:
-				Members.createMember();
+				members.createMember();
 				System.out.println("\n\n");
 				break;
 				
 			case 2:
-				Members.viewMembers();
+				members.viewMembers();
 				System.out.println("\n\n");
 				break;
 				
 			case 3:
-				Members.searchMember();
+				members.searchMember();
 				System.out.println("\n\n");
 				break;
 			}

@@ -19,6 +19,11 @@ import controller.ViewCreateUpdateBoat;
 public class Boats {
 	
 	private static final double maxLength = 10000;
+	private MainScreen mainScreen;
+	
+	public Boats(MainScreen mainScreen) {
+		this.mainScreen = mainScreen;
+	}
 	
 	/**
 	 * Checks if Update Boats choice input is valid (Add a boat, Update boat's info, Remove
@@ -26,7 +31,7 @@ public class Boats {
 	 * @param s the user's input
 	 * @param message the validation message
 	 */
-	public static void checkChoice(String s, Message message) {
+	public void checkChoice(String s, Message message) {
 		
 		
 		if (s == null || !(s.equals("1") || s.equals("2") || s.equals("3") || s.equals("4"))) {
@@ -43,7 +48,7 @@ public class Boats {
 	 * @param s the user's input
 	 * @param message the validation message
 	 */
-	public static void checkUpdateChoice(String s, Message message) {
+	public void checkUpdateChoice(String s, Message message) {
 		
 		
 		if (s == null || !(s.equals("1") || s.equals("2") || s.equalsIgnoreCase("back"))) {
@@ -60,7 +65,7 @@ public class Boats {
 	 * @param s the user's input
 	 * @param message the validation message
 	 */
-	public static void checkTypeChoice(String s, Message message) {
+	public void checkTypeChoice(String s, Message message) {
 		
 		
 		if (s == null) {
@@ -100,7 +105,7 @@ public class Boats {
 	 * @param s the user's input
 	 * @param message the validation message
 	 */
-	public static void checkBoatChoice(String s, Message message) {
+	public void checkBoatChoice(String s, Message message) {
 		
 		
 		if (s == null) {
@@ -111,8 +116,8 @@ public class Boats {
 		
 		else {
 			
-			String[] boats = ViewCreateUpdateBoat.getBoats(Main.selectedPersonalNumber);
-			boolean validated=false;;
+			String[] boats = getPrettyBoats();
+			boolean validated=false;
 			
 			for (int i=0; i<boats.length; i++) {
 				String choice = "" + (i+1);
@@ -135,11 +140,43 @@ public class Boats {
 		
 	}
 	
+	// Returns a prettified boat string. 
+	private String getPrettyBoatById(int id) {
+		String boat = ViewCreateUpdateBoat.getBoatById(id);
+		String[] splitted = boat.split(", ");
+		boat = "Boat Id: ";
+		boat += splitted[0];
+		boat += ", Type: ";
+		boat += splitted[1];
+		boat += ", Length: ";
+		boat += "meters";
+		return boat;
+	}
+	
+	// Prettifies the boats strings for the selceted personal number
+	String[] getPrettyBoats() {
+		String[] boats = ViewCreateUpdateBoat.getBoats(mainScreen.selectedPersonalNumber);
+		if (boats == null)
+			return null;
+		String[] prettyBoats = new String[boats.length];
+		
+		for (int i=0; i<boats.length; i++) {
+			String[] splitted = boats[i].split(", ");
+			prettyBoats[i] = "Boat Id: ";
+			prettyBoats[i] += splitted[0];
+			prettyBoats[i] += ", Type: ";
+			prettyBoats[i] += splitted[1];
+			prettyBoats[i] += ", Length: ";
+			prettyBoats[i] += "meters";
+		}
+		return prettyBoats;
+	}
+	
 	/**
 	 * Screen for showing list of boats
 	 */
-	static void viewBoatsList() {
-		String [] boats = ViewCreateUpdateBoat.getBoats(Main.selectedPersonalNumber);
+	void viewBoatsList() {
+		String [] boats = getPrettyBoats();
 		if (boats == null || boats.length == 0) {
 			System.out.println("Member does not have any boats registered !");
 			System.out.println("------------------------------------------------");
@@ -153,7 +190,7 @@ public class Boats {
 	/**
 	 * Update boats screen
 	 */
-	static void updateBoats() {
+	void updateBoats() {
 		while (true) {
 			String s = "1) Add a boat\n";
 			s += "2) Update boat's info\n";
@@ -165,7 +202,7 @@ public class Boats {
 			int n = 0;
 			
 			try {
-				 n = Integer.parseInt(UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkChoice", Main.args)));
+				 n = Integer.parseInt(UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkChoice", MainScreen.args), mainScreen.scanner, this));
 			} 
 			
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -213,7 +250,7 @@ public class Boats {
 	/**
 	 * Add a new boat screen
 	 */
-	static void addBoat() {
+	void addBoat() {
 		
 		System.out.println("\n------------------------------------------------\nPlease choose boat's Type or type back to go back:");
 		String[] boatTypes = ViewCreateUpdateBoat.getBoatTypes();
@@ -226,7 +263,7 @@ public class Boats {
 		
 		String validatedInput = "";
 		try {
-			validatedInput = UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkTypeChoice", Main.args));
+			validatedInput = UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkTypeChoice", MainScreen.args), mainScreen.scanner, this);
 		} 
 		
 		catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -243,7 +280,7 @@ public class Boats {
 		while (notValidLength) {
 			try {
 				System.out.print("Please Input boat length in meters: ");
-				String input = Main.scanner.nextLine();
+				String input = mainScreen.scanner.nextLine();
 				length = Double.parseDouble(input);
 				if (length >= 1 && length <= maxLength)
 					notValidLength = false;
@@ -262,7 +299,7 @@ public class Boats {
 		
 		
 		int typeChoice = Integer.parseInt(validatedInput);
-		ViewCreateUpdateBoat.addBoat(Main.selectedPersonalNumber, typeChoice, length);
+		ViewCreateUpdateBoat.addBoat(mainScreen.selectedPersonalNumber, typeChoice, length);
 		System.out.println("Boat has been successfully added!\n-----------------------------------------------------------");
 		
 	}
@@ -272,10 +309,10 @@ public class Boats {
 	 * @param method Method object to update or remove boat (depends on the user input)
 	 * @param message Output message.
 	 */
-	static void chooseBoat(Method method, String message) {
+	void chooseBoat(Method method, String message) {
 		
 		while (true) {
-			String[] boats = ViewCreateUpdateBoat.getBoats(Main.selectedPersonalNumber);
+			String[] boats = getPrettyBoats();
 			if (boats == null || boats.length == 0) {
 				System.out.println("Member does not have any boats registered !");
 				System.out.println("------------------------------------------------");
@@ -291,7 +328,7 @@ public class Boats {
 			
 			String chosenBoat = "";
 			try {
-				chosenBoat = UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkBoatChoice", Main.args));
+				chosenBoat = UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkBoatChoice", MainScreen.args), mainScreen.scanner, this);
 			} 
 			
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -300,7 +337,7 @@ public class Boats {
 			}
 			
 			if (chosenBoat.equalsIgnoreCase("back")) {
-				Main.selectedBoatId = -1;
+				mainScreen.selectedBoatId = -1;
 				return;
 			}
 			
@@ -308,12 +345,12 @@ public class Boats {
 				chosenBoat = boats[Integer.parseInt(chosenBoat) -1];
 				String formattedString = chosenBoat.split(" ")[2];
 				formattedString = formattedString.substring(0, formattedString.length()-1);
-				Main.selectedBoatId = Integer.parseInt(formattedString);
+				mainScreen.selectedBoatId = Integer.parseInt(formattedString);
 			}
 			
-			System.out.println(ViewCreateUpdateBoat.getBoatById(Main.selectedBoatId));
+			System.out.println(getPrettyBoatById(mainScreen.selectedBoatId));
 			try {
-				method.invoke(null);
+				method.invoke(this);
 			} 
 			
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -326,17 +363,17 @@ public class Boats {
 	/**
 	 * Update boat info screen
 	 */
-	public static void updateBoatInfo() {
+	public void updateBoatInfo() {
 		
 		while (true) {
-			if (Main.selectedBoatId == -1)
+			if (mainScreen.selectedBoatId == -1)
 				return;
 			
 			System.out.println("\nPlease choose one of the following options to update (or type back to go back)\n1) Update boat's length.\n2) Update boat's type\n--------------");
 			String choice = "";
 			
 			try {
-				choice = UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkUpdateChoice", Main.args));
+				choice = UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkUpdateChoice", MainScreen.args), mainScreen.scanner, this);
 			} 
 			
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -359,14 +396,14 @@ public class Boats {
 	/**
 	 * Update boat's length screen
 	 */
-	static void updateBoatLength() {
+	void updateBoatLength() {
 		
 		boolean notValidLength = true;
 		double length = 0;
 		while (notValidLength) {
 			try {
 				System.out.print("Please Input boat length in meters (or type back to go back): ");
-				String input = Main.scanner.nextLine();
+				String input = mainScreen.scanner.nextLine();
 				
 				if (input == null || input.equals(""))
 					throw new IllegalArgumentException();
@@ -389,7 +426,7 @@ public class Boats {
 			}
 		}
 		
-		if (ViewCreateUpdateBoat.updateBoatLength(Main.selectedBoatId, length))
+		if (ViewCreateUpdateBoat.updateBoatLength(mainScreen.selectedBoatId, length))
 			System.out.println("Boat length has been updated successfully !\n---------------------------------------------------");
 		
 	}
@@ -397,7 +434,7 @@ public class Boats {
 	/**
 	 * Update boat's type screen
 	 */
-	static void updateBoatType() {
+	void updateBoatType() {
 		System.out.println("\n------------------------------------------------\nPlease choose boat's Type or type back to go back:");
 		String[] boatTypes = ViewCreateUpdateBoat.getBoatTypes();
 		for (int i=0; i<boatTypes.length; i++) {
@@ -409,7 +446,7 @@ public class Boats {
 		
 		String validatedInput = "";
 		try {
-			validatedInput = UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkTypeChoice", Main.args));
+			validatedInput = UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkTypeChoice", MainScreen.args), mainScreen.scanner, this);
 		} 
 		
 		catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -421,25 +458,25 @@ public class Boats {
 		String newType = boatTypes[index];
 		
 		
-		if (ViewCreateUpdateBoat.updateBoatType(Main.selectedBoatId, newType))
+		if (ViewCreateUpdateBoat.updateBoatType(mainScreen.selectedBoatId, newType))
 			System.out.println("Boat type has been updated successfully !");
 	}
 	
 	/**
 	 * Remove boat screen
 	 */
-	public static void removeBoat() {
-		if (Main.selectedBoatId == -1)
+	public void removeBoat() {
+		if (mainScreen.selectedBoatId == -1)
 			return;
 		
 		System.out.println("Are you sure you want to remove the following boat ?:");
-		System.out.println(ViewCreateUpdateBoat.getBoatById(Main.selectedBoatId));
+		System.out.println(getPrettyBoatById(mainScreen.selectedBoatId));
 		
 		String confirmQuestion = "Confirm with Y for yes, or N for no";
 		String validatedInput = "";
 		
 		try {
-			validatedInput = UtilClass.validatedInput(confirmQuestion, UtilClass.class.getMethod("checkYesNoChoice", Main.args));
+			validatedInput = UtilClass.validatedInput(confirmQuestion, UtilClass.class.getMethod("checkYesNoChoice", MainScreen.args), mainScreen.scanner, null);
 		} 
 		
 		catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -448,7 +485,7 @@ public class Boats {
 		}
 		
 		if (validatedInput.equalsIgnoreCase("y")) {
-			boolean b = ViewCreateUpdateBoat.removeBoat(Main.selectedBoatId);
+			boolean b = ViewCreateUpdateBoat.removeBoat(mainScreen.selectedBoatId);
 			if (b)
 				System.out.println("Boat has been successfully removed !!!\n----------------------------------------------------");
 		}

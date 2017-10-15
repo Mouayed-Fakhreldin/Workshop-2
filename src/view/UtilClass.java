@@ -2,6 +2,7 @@ package view;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Scanner;
 
 import controller.Message;
 
@@ -35,6 +36,8 @@ public class UtilClass {
 	 * checkSth(String input, Message validationMessage).
 	 * @param s The output that will be displayed to the user (so the user will know what to input)
 	 * @param booleanChecker A method object with the structure checkSth(String input, Message validationMessage)
+	 * @param scanner The Scanner.java object from which to read user's input 
+	 * @param object The object from which the boolean checker method should be called
 	 * @return the validated input
 	 * 
 	 * @throws IllegalAccessException if this Method object is enforcing Java language access 
@@ -49,16 +52,16 @@ public class UtilClass {
 	 * 
 	 * @throws InvocationTargetException  if the underlying method throws an exception.
 	 */
-	static String validatedInput(String s, Method booleanChecker) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	static String validatedInput(String s, Method booleanChecker, Scanner scanner, Object object) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
 		String validatedInput = ""; // The user's validated input 
 		
 		while (true) {
 			
 			System.out.print(s + ": ");
-			validatedInput = Main.scanner.nextLine();
+			validatedInput = scanner.nextLine();
 			Message message = new Message();
-			booleanChecker.invoke(null, validatedInput, message);
+			booleanChecker.invoke(object, validatedInput, message);
 			
 			if (message.isValidated())
 				return validatedInput;
@@ -69,4 +72,6 @@ public class UtilClass {
 		}
 		
 	}
+	
+	
 }

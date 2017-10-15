@@ -2,6 +2,7 @@ package view;
 
 import java.lang.reflect.InvocationTargetException;
 
+
 import controller.Message;
 import controller.ViewCreateUpdateMember;
 
@@ -15,12 +16,21 @@ import controller.ViewCreateUpdateMember;
  */
 public class Members {
 	
+	private MainScreen mainScreen;
+	private Boats boats;
+	
+	
+	public Members(MainScreen mainScreen, Boats boats) {
+		this.mainScreen = mainScreen;
+		this.boats = boats;
+	}
+	
 	/**
 	 * Checks if the list choice input is valid (Verbose list or compact list)
 	 * @param s the user's input
 	 * @param message the validation message
 	 */
-	public static void checkListChoice(String s, Message message) {
+	public void checkListChoice(String s, Message message) {
 
 		if (s == null) {
 			message.setValidated(false);
@@ -42,7 +52,7 @@ public class Members {
 	 * @param s the user's input
 	 * @param message the validation message
 	 */
-	public static void checkChoice(String s, Message message) {
+	public void checkChoice(String s, Message message) {
 		
 		if (s == null || !(s.equals("1") || s.equals("2") || s.equals("3") || s.equals("4") || s.equals("5") )) {
 			message.setValidated(false);
@@ -54,23 +64,63 @@ public class Members {
 	}
 	
 	/**
+	 * Checks if the personal number the user inputs for creating a memaber is valid.
+	 * Personal number needs to be a 10 digit number.
+	 * @param personalNumber The personal number to be checked
+	 * @param message The validation message.
+	 */
+	public void checkPersonalNumberCreate(String personalNumber, Message message) {
+		
+		if (personalNumber != null && personalNumber.equalsIgnoreCase("back")) {
+			message.setValidated(true);
+			return;
+		}
+		
+		// Check that the user input is a valid personal number
+		ViewCreateUpdateMember.checkPersonalNumberValidity(personalNumber, message);
+		
+		// Check that the personal number is not in use
+		if (message.isValidated()) {
+			ViewCreateUpdateMember.checkPersonalNumber(personalNumber, message);
+			message.setValidated(!message.isValidated());
+			if (!message.isValidated())
+				message.setMessage("Personal number is in use");
+		}
+	}
+	
+	/**
+	 * Checks that user's input for searching for a member by personal number is valid. This method checks that the input is a valid personal number and that database has a member stored with this personal number
+	 * @param s The user's input 
+	 * @param message The validation message.
+	 */
+	public void checkSearchMemberInput(String s, Message message) {
+		
+		if (s != null && s.equalsIgnoreCase("back")) {
+			message.setValidated(true);
+			return;
+		}
+		
+		ViewCreateUpdateMember.checkPersonalNumber(s, message);
+	}
+	
+	/**
 	 * Create member screen
 	 */
-	static void createMember()  {
+	void createMember()  {
 		
 		String name = "";				// New member's name
 		String personalNumber = "";		// New member's personal number
 		
 		try {
 			
-			name = UtilClass.validatedInput("New member's name (or type back to go back to main menu)", ViewCreateUpdateMember.class.getMethod("checkName", Main.args));
+			name = UtilClass.validatedInput("New member's name (or type back to go back to main menu)", ViewCreateUpdateMember.class.getMethod("checkName", MainScreen.args), mainScreen.scanner, null);
 			if (name.equalsIgnoreCase("back")) {
 				System.out.println("------------------------------------------------");
 				return;
 			}
 				
 			
-			personalNumber = UtilClass.validatedInput("New member's personal number (or type back to go back to main menu)", ViewCreateUpdateMember.class.getMethod("checkPersonalNumberCreate", Main.args));
+			personalNumber = UtilClass.validatedInput("New member's personal number (or type back to go back to main menu)", Members.class.getMethod("checkPersonalNumberCreate", MainScreen.args), mainScreen.scanner, this);
 			if (personalNumber.equalsIgnoreCase("back")) {
 				System.out.println("------------------------------------------------");
 				return;
@@ -90,12 +140,12 @@ public class Members {
 	/**
 	 * List members choice screen
 	 */
-	static void viewMembers() {
+	void viewMembers() {
 		
 		String choice = "";
 		System.out.println("\n1) Compact List\n2) Verbose List");
 		try {
-			choice = UtilClass.validatedInput("Choice (or type back to go back to main menu)", Members.class.getMethod("checkListChoice", Main.args));
+			choice = UtilClass.validatedInput("Choice (or type back to go back to main menu)", Members.class.getMethod("checkListChoice", MainScreen.args), mainScreen.scanner, this);
 			if (choice.equalsIgnoreCase("back"))
 				return;
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -104,23 +154,64 @@ public class Members {
 		}
 		
 		System.out.println("---------------");
-		if (choice.equals("1"))
-			System.out.println(ViewCreateUpdateMember.compactList());
 		
-		else
-			System.out.println(ViewCreateUpdateMember.verboseList());
+		if (choice.equals("1")) {
+			String[] membersList = ViewCreateUpdateMember.membersList();
+			if (membersList == null) {
+				System.out.println("No members registered !!!!!!");
+				return;
+			}
+				
+			for (String member:membersList) {
+				String[] s = member.split(", ");
+				StringBuilder builder = new StringBuilder("Member ID: ");
+				builder.append(s[0]);
+				builder.append(", Name: ");
+				builder.append(s[1]);
+				builder.append(", Number of owned boats: ");
+				builder.append(s[3]);
+				System.out.println(builder.toString());
+			}
+			
+			System.out.println("--------------------------------------------------------------------------");
+		}
+		
+		else {
+			String [] membersList = ViewCreateUpdateMember.membersList();
+			if (membersList == null) {
+				System.out.println("No members registered !!!!!!");
+				return;
+			}
+			for (String member:membersList) {
+				String[] s = member.split(", ");
+				StringBuilder builder = new StringBuilder("Member ID: ");
+				builder.append(s[0]);
+				builder.append(", Name: ");
+				builder.append(s[1]);
+				builder.append(", personal number: ");
+				builder.append(s[2]);
+				builder.append(", Number of owned boats: ");
+				builder.append(s[3]);
+				System.out.println(builder.toString());
+				this.mainScreen.selectedPersonalNumber = s[2];
+				String[] boats = this.boats.getPrettyBoats();
+				if (boats != null)	
+					for (int i=0; i<boats.length; i++)
+						System.out.println(boats[i]);
+				System.out.println("--------------------------");
+			}
+		}
 		
 	}
 	
 	/**
 	 * Search for a member screen
 	 */
-	static void searchMember() {
-		
+	void searchMember() {
 		
 		try {
-			Main.selectedPersonalNumber = UtilClass.validatedInput("Input member's personal number (or type back to go back to main menu)", ViewCreateUpdateMember.class.getMethod("checkPersonalNumber", Main.args));
-			if (Main.selectedPersonalNumber.equalsIgnoreCase("back"))
+			mainScreen.selectedPersonalNumber = UtilClass.validatedInput("Input member's personal number (or type back to go back to main menu)", Members.class.getMethod("checkSearchMemberInput", MainScreen.args), mainScreen.scanner, this);
+			if (mainScreen.selectedPersonalNumber.equalsIgnoreCase("back"))
 				return;
 		} 
 		
@@ -130,6 +221,7 @@ public class Members {
 		}
 		
 		
+		
 		searchMember2();
 		
 	}
@@ -137,19 +229,29 @@ public class Members {
 	/**
 	 * The screen showing the options after the member has been chosen (by personal number)
 	 */
-	static void searchMember2() {
+	void searchMember2() {
 		
 		while (true) {
 			
 			boolean shouldGoBack = false;
-			System.out.println(ViewCreateUpdateMember.getMemberInfo(Main.selectedPersonalNumber));
+			
+			String member = ViewCreateUpdateMember.getMemberInfo(mainScreen.selectedPersonalNumber);
+			String[] s = member.split(", ");
+			StringBuilder builder = new StringBuilder("Member ID: ");
+			builder.append(s[0]);
+			builder.append(", Name: ");
+			builder.append(s[1]);
+			builder.append(", Number of owned boats: ");
+			builder.append(s[3]);
+			System.out.println(builder.toString());
+			
 			System.out.println();
 			
 			System.out.println("1) View Boats List\n2) Update boats\n3) Update member's name.\n4) Delete member.\n5) back\n---------------------------------------------");
 			String choice = "";
 			
 			try {
-				choice = UtilClass.validatedInput("Choice: ", Members.class.getMethod("checkChoice", Main.args));
+				choice = UtilClass.validatedInput("Choice: ", Members.class.getMethod("checkChoice", MainScreen.args), mainScreen.scanner, this);
 			} 
 			
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -159,10 +261,10 @@ public class Members {
 						
 			switch (choice) {
 				case "1":
-					Boats.viewBoatsList();
+					boats.viewBoatsList();
 					break;
 				case "2":
-					Boats.updateBoats();
+					boats.updateBoats();
 					break;
 				case "3":
 					updateName();
@@ -185,12 +287,12 @@ public class Members {
 	/**
 	 * Update member's name screen
 	 */
-	static void updateName() {
+	void updateName() {
 		
 		String newName = "";
 		
 		try {
-			newName = UtilClass.validatedInput("New member's name (or type back to go back to the previous menu)", ViewCreateUpdateMember.class.getMethod("checkNameUpdate", Main.args));
+			newName = UtilClass.validatedInput("New member's name (or type back to go back to the previous menu)", ViewCreateUpdateMember.class.getMethod("checkName", MainScreen.args), mainScreen.scanner, null);
 			if (newName.equalsIgnoreCase("back"))
 				return;
 		} 
@@ -200,7 +302,7 @@ public class Members {
 			e.printStackTrace();
 		}
 		
-		if (ViewCreateUpdateMember.updateName(Main.selectedPersonalNumber, newName))
+		if (ViewCreateUpdateMember.updateName(mainScreen.selectedPersonalNumber, newName))
 			System.out.println("Member's name successfully updated!\n---------------------------------");
 		
 		
@@ -210,13 +312,13 @@ public class Members {
 	 * Deletes a member screen. Confirms with the user if he/she is sure about removing membership
 	 * @return true if the user has confirmed to remove the member
 	 */
-	static boolean deleteMember() {
+	boolean deleteMember() {
 		
-		String confirmQuestion = String.format("Are you sure you want to delete the membership of %s, %s ? Y for yes, N for no", ViewCreateUpdateMember.getMemberName(Main.selectedPersonalNumber), Main.selectedPersonalNumber);
+		String confirmQuestion = String.format("Are you sure you want to delete the membership of %s, %s ? Y for yes, N for no", ViewCreateUpdateMember.getMemberName(mainScreen.selectedPersonalNumber), mainScreen.selectedPersonalNumber);
 		String validatedInput = "";
 		
 		try {
-			validatedInput = UtilClass.validatedInput(confirmQuestion, UtilClass.class.getMethod("checkYesNoChoice", Main.args));
+			validatedInput = UtilClass.validatedInput(confirmQuestion, UtilClass.class.getMethod("checkYesNoChoice", MainScreen.args), mainScreen.scanner, null);
 		} 
 		
 		catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -225,7 +327,7 @@ public class Members {
 		}
 		
 		if (validatedInput.equalsIgnoreCase("y")) {
-			ViewCreateUpdateMember.deleteMember(Main.selectedPersonalNumber);
+			ViewCreateUpdateMember.deleteMember(mainScreen.selectedPersonalNumber);
 			System.out.println("Memaber has been removed\n--------------------------------------------------------");
 			return true;
 		}

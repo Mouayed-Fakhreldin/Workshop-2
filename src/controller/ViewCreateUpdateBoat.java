@@ -1,7 +1,5 @@
 package controller;
 
-//import java.util.ArrayList;
-
 import model.Boat;
 import model.Member;
 import model.Queries;
@@ -61,7 +59,7 @@ public class ViewCreateUpdateBoat {
 	/**
 	 * Gets the list of boats registered for a certain member 
 	 * @param selectedPersonalNumber The personal number of the owner of the boats
-	 * @return list of boats as a string array
+	 * @return list of boats as a string array or null if the member does not own any boats. Each string represents a boat with the form: "id, type, length"
 	 */
 	public static String[] getBoats(String selectedPersonalNumber) {
 		
@@ -72,13 +70,12 @@ public class ViewCreateUpdateBoat {
 		
 		String[] boatsStrings = new String[boats.length];
 		for (int i=0; i<boats.length; i++) {
-			StringBuilder s = new StringBuilder("Boat ID: ");
+			StringBuilder s = new StringBuilder();
 			s.append(boats[i].getBoatId());
 			s.append(", ");
 			s.append(boats[i].getType());
-			s.append(": ");
+			s.append(", ");
 			s.append(boats[i].getLength());
-			s.append(" meters.");
 			boatsStrings[i] = s.toString();
 		}
 		
@@ -89,19 +86,19 @@ public class ViewCreateUpdateBoat {
 	/**
 	 * Gets a boat by ID from the database.
 	 * @param id the boat's ID
-	 * @return the boat as a String.
+	 * @return the boat as a String or null if the boat has not been found. The boat string will be in the form of "id, type, length"
 	 */
 	public static String getBoatById(int id) {
 		
 		Boat boat = Queries.getBoat(id);
+		if (boat == null)
+			return null;
 		
-		String s = "Boat ID: ";
-		s += boat.getBoatId();
+		String s = "" + boat.getBoatId();
 		s += ", ";
 		s += boat.getType().toString();
-		s += ": ";
+		s += ", ";
 		s += boat.getLength();
-		s += " meters";
 		return s;
 	}
 	
