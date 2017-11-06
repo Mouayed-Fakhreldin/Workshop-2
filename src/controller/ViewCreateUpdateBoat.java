@@ -1,8 +1,8 @@
 package controller;
 
 import model.Boat;
+import model.DBConnection;
 import model.Member;
-import model.Queries;
 import model.Boat.BoatType;
 
 /**
@@ -16,11 +16,12 @@ import model.Boat.BoatType;
  */
 public class ViewCreateUpdateBoat {
 	
+	private DBConnection dbConnection = new DBConnection();
 	/**
 	 * Gets the available boat types.
 	 * @return a String array of the boat types.
 	 */
-	public static String[] getBoatTypes() {
+	public String[] getBoatTypes() {
 		
 		BoatType[] types = BoatType.values();
 		String[] boatTypes = new String[types.length];
@@ -36,12 +37,12 @@ public class ViewCreateUpdateBoat {
 	 * @param length The length of the boat (must be at least 1 meter).
 	 * @throws IllegalArgumentException if length is less than one.
 	 */
-	public static void addBoat(String selectedPersonalNumber, int typeChoice, double length) {
+	public void addBoat(String selectedPersonalNumber, int typeChoice, double length) {
 		
 		if (length < 1)
 			throw new IllegalArgumentException("Length can only be equal or bigger than 1");
 		
-		Member member = Queries.getMember(selectedPersonalNumber);
+		Member member = dbConnection.getMember(selectedPersonalNumber);
 		typeChoice--;
 		BoatType[] types = BoatType.values();
 		BoatType type = null;
@@ -53,7 +54,7 @@ public class ViewCreateUpdateBoat {
 		}
 		
 		Boat boat = new Boat(member, type, length);
-		Queries.storeBoat(boat);
+		dbConnection.storeBoat(boat);
 	}
 	
 	/**
@@ -61,10 +62,10 @@ public class ViewCreateUpdateBoat {
 	 * @param selectedPersonalNumber The personal number of the owner of the boats
 	 * @return list of boats as a string array or null if the member does not own any boats. Each string represents a boat with the form: "id, type, length"
 	 */
-	public static String[] getBoats(String selectedPersonalNumber) {
+	public String[] getBoats(String selectedPersonalNumber) {
 		
-		Member member = Queries.getMember(selectedPersonalNumber);
-		Boat[] boats = Queries.getMemberBoats(member);
+		Member member = dbConnection.getMember(selectedPersonalNumber);
+		Boat[] boats = dbConnection.getMemberBoats(member);
 		if (boats == null)
 			return null;
 		
@@ -88,9 +89,9 @@ public class ViewCreateUpdateBoat {
 	 * @param id the boat's ID
 	 * @return the boat as a String or null if the boat has not been found. The boat string will be in the form of "id, type, length"
 	 */
-	public static String getBoatById(int id) {
+	public String getBoatById(int id) {
 		
-		Boat boat = Queries.getBoat(id);
+		Boat boat = dbConnection.getBoat(id);
 		if (boat == null)
 			return null;
 		
@@ -107,10 +108,10 @@ public class ViewCreateUpdateBoat {
 	 * @param id The ID of the boat to be removed 
 	 * @return true if the boat has been successfully removed, false otherwise.
 	 */
-	public static boolean removeBoat(int id) {
+	public boolean removeBoat(int id) {
 		
-		Boat boat = Queries.getBoat(id);
-		return Queries.deleteBoat(boat);
+		Boat boat = dbConnection.getBoat(id);
+		return dbConnection.deleteBoat(boat);
 		
 	}
 	
@@ -121,13 +122,13 @@ public class ViewCreateUpdateBoat {
 	 * @return true if the boat has been successfully updated, false otherwise.
 	 * @throws IllegalArgumentException if length is less than one.
 	 */
-	public static boolean updateBoatLength(int id, double newLength) {
+	public boolean updateBoatLength(int id, double newLength) {
 		
 		if (newLength <1)
 			throw new IllegalArgumentException("Length can only be equal to or bigger than 1");
 		
-		Boat boat = Queries.getBoat(id);
-		return Queries.updateBoatLength(boat, newLength);
+		Boat boat = dbConnection.getBoat(id);
+		return dbConnection.updateBoatLength(boat, newLength);
 	}
 	
 	/**
@@ -136,9 +137,9 @@ public class ViewCreateUpdateBoat {
 	 * @param type Thye new type of the boat 
 	 * @return true if the boat has been successfully updated, false otherwise.
 	 */
-	public static boolean updateBoatType(int id, String type) {
-		Boat boat = Queries.getBoat(id);
+	public boolean updateBoatType(int id, String type) {
+		Boat boat = dbConnection.getBoat(id);
 		BoatType newType = BoatType.valueOf(type.toUpperCase());
-		return Queries.updateBoatType(boat, newType);
+		return dbConnection.updateBoatType(boat, newType);
 	}
 }

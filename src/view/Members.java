@@ -18,6 +18,7 @@ public class Members {
 	
 	private MainScreen mainScreen;
 	private Boats boats;
+	private ViewCreateUpdateMember memberController = new ViewCreateUpdateMember();
 	
 	
 	public Members(MainScreen mainScreen, Boats boats) {
@@ -77,11 +78,11 @@ public class Members {
 		}
 		
 		// Check that the user input is a valid personal number
-		ViewCreateUpdateMember.checkPersonalNumberValidity(personalNumber, message);
+		memberController.checkPersonalNumberValidity(personalNumber, message);
 		
 		// Check that the personal number is not in use
 		if (message.isValidated()) {
-			ViewCreateUpdateMember.checkPersonalNumber(personalNumber, message);
+			memberController.checkPersonalNumber(personalNumber, message);
 			message.setValidated(!message.isValidated());
 			if (!message.isValidated())
 				message.setMessage("Personal number is in use");
@@ -100,7 +101,7 @@ public class Members {
 			return;
 		}
 		
-		ViewCreateUpdateMember.checkPersonalNumber(s, message);
+		memberController.checkPersonalNumber(s, message);
 	}
 	
 	/**
@@ -113,7 +114,7 @@ public class Members {
 		
 		try {
 			
-			name = UtilClass.validatedInput("New member's name (or type back to go back to main menu)", ViewCreateUpdateMember.class.getMethod("checkName", MainScreen.args), mainScreen.scanner, null);
+			name = UtilClass.validatedInput("New member's name (or type back to go back to main menu)", ViewCreateUpdateMember.class.getMethod("checkName", MainScreen.args), mainScreen.scanner, memberController);
 			if (name.equalsIgnoreCase("back")) {
 				System.out.println("------------------------------------------------");
 				return;
@@ -132,7 +133,7 @@ public class Members {
 			e.printStackTrace();
 		}
 		
-		if (ViewCreateUpdateMember.createMember(name, personalNumber))
+		if (memberController.createMember(name, personalNumber))
 			System.out.println("Member successfully created!\n---------------------------------");
 		
 	}
@@ -156,7 +157,7 @@ public class Members {
 		System.out.println("---------------");
 		
 		if (choice.equals("1")) {
-			String[] membersList = ViewCreateUpdateMember.membersList();
+			String[] membersList = memberController.membersList();
 			if (membersList == null) {
 				System.out.println("No members registered !!!!!!");
 				return;
@@ -177,7 +178,7 @@ public class Members {
 		}
 		
 		else {
-			String [] membersList = ViewCreateUpdateMember.membersList();
+			String [] membersList = memberController.membersList();
 			if (membersList == null) {
 				System.out.println("No members registered !!!!!!");
 				return;
@@ -235,7 +236,7 @@ public class Members {
 			
 			boolean shouldGoBack = false;
 			
-			String member = ViewCreateUpdateMember.getMemberInfo(mainScreen.selectedPersonalNumber);
+			String member = memberController.getMemberInfo(mainScreen.selectedPersonalNumber);
 			String[] s = member.split(", ");
 			StringBuilder builder = new StringBuilder("Member ID: ");
 			builder.append(s[0]);
@@ -292,7 +293,7 @@ public class Members {
 		String newName = "";
 		
 		try {
-			newName = UtilClass.validatedInput("New member's name (or type back to go back to the previous menu)", ViewCreateUpdateMember.class.getMethod("checkName", MainScreen.args), mainScreen.scanner, null);
+			newName = UtilClass.validatedInput("New member's name (or type back to go back to the previous menu)", ViewCreateUpdateMember.class.getMethod("checkName", MainScreen.args), mainScreen.scanner, memberController);
 			if (newName.equalsIgnoreCase("back"))
 				return;
 		} 
@@ -302,7 +303,7 @@ public class Members {
 			e.printStackTrace();
 		}
 		
-		if (ViewCreateUpdateMember.updateName(mainScreen.selectedPersonalNumber, newName))
+		if (memberController.updateName(mainScreen.selectedPersonalNumber, newName))
 			System.out.println("Member's name successfully updated!\n---------------------------------");
 		
 		
@@ -314,7 +315,7 @@ public class Members {
 	 */
 	boolean deleteMember() {
 		
-		String confirmQuestion = String.format("Are you sure you want to delete the membership of %s, %s ? Y for yes, N for no", ViewCreateUpdateMember.getMemberName(mainScreen.selectedPersonalNumber), mainScreen.selectedPersonalNumber);
+		String confirmQuestion = String.format("Are you sure you want to delete the membership of %s, %s ? Y for yes, N for no", memberController.getMemberName(mainScreen.selectedPersonalNumber), mainScreen.selectedPersonalNumber);
 		String validatedInput = "";
 		
 		try {
@@ -327,7 +328,7 @@ public class Members {
 		}
 		
 		if (validatedInput.equalsIgnoreCase("y")) {
-			ViewCreateUpdateMember.deleteMember(mainScreen.selectedPersonalNumber);
+			memberController.deleteMember(mainScreen.selectedPersonalNumber);
 			System.out.println("Memaber has been removed\n--------------------------------------------------------");
 			return true;
 		}

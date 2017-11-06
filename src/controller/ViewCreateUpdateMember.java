@@ -1,7 +1,7 @@
 package controller;
 
+import model.DBConnection;
 import model.Member;
-import model.Queries;
 
 /**
  * A controller class which handles and connects the Members class in the view
@@ -14,13 +14,15 @@ import model.Queries;
  */
 public class ViewCreateUpdateMember {
 
+	private DBConnection dbConnection = new DBConnection();
+	
 	/**
 	 * Checks if the name the user inputs for creating a memaber is valid. Name can not 
 	 * be empty, null, and can not contain too many spaces and can not contain characters which are not alphabetic and not a space.
 	 * @param name The name to be checked 
 	 * @param message The validation message.
 	 */
-	public static void checkName(String name, Message message) {
+	public void checkName(String name, Message message) {
 
 		try {
 			@SuppressWarnings("unused")
@@ -41,7 +43,7 @@ public class ViewCreateUpdateMember {
 	 * @param personalNumber the personal number to be checked
 	 * @param message the validation message.
 	 */
-	public static void checkPersonalNumberValidity(String personalNumber, Message message) {
+	public void checkPersonalNumberValidity(String personalNumber, Message message) {
 
 		try {
 			@SuppressWarnings("unused")
@@ -61,13 +63,13 @@ public class ViewCreateUpdateMember {
 	 * @param personalNumber The personal number to be searched for.
 	 * @param message The validation message.
 	 */
-	public static void checkPersonalNumber(String personalNumber, Message message) {
+	public void checkPersonalNumber(String personalNumber, Message message) {
 
 		checkPersonalNumberValidity(personalNumber, message);
 		if (!message.isValidated())
 			return;
 
-		if (Queries.checkPersonalNumber(personalNumber)) {
+		if (dbConnection.checkPersonalNumber(personalNumber)) {
 			message.setMessage("Member has not been found. Please make sure the personal number is correct");
 			message.setValidated(false);
 			return;
@@ -81,9 +83,9 @@ public class ViewCreateUpdateMember {
 	 * Gets all the members from the database with the number of owned boats for each member.
 	 * @return an array of Strings or null if no members have been found. Each String in the array represents a member in the form: "id, name, personalNumber, numberOfBoats"
 	 */
-	public static String[] membersList() {
+	public String[] membersList() {
 
-		Member[] members = Queries.getMembers();
+		Member[] members = dbConnection.getMembers();
 		if (members == null)
 			return null;
 
@@ -110,9 +112,9 @@ public class ViewCreateUpdateMember {
 	 * @param personalNumber The member's personal number 
 	 * @return true if the member has been created and added to the database, false otherwise.
 	 */
-	public static boolean createMember(String name, String personalNumber) {
+	public boolean createMember(String name, String personalNumber) {
 
-		return Queries.storeMember(new Member(name, personalNumber));
+		return dbConnection.storeMember(new Member(name, personalNumber));
 
 	}
 
@@ -122,12 +124,12 @@ public class ViewCreateUpdateMember {
 	 * @param newName The member's new name
 	 * @return true if the member's name has been updated successfully, false otherwise.
 	 */
-	public static boolean updateName(String personalNumber, String newName) {
+	public boolean updateName(String personalNumber, String newName) {
 
-		if (Queries.checkPersonalNumber(personalNumber))
+		if (dbConnection.checkPersonalNumber(personalNumber))
 			return false;
 
-		return Queries.updateMemberName(Queries.getMember(personalNumber), newName);
+		return dbConnection.updateMemberName(dbConnection.getMember(personalNumber), newName);
 
 	}
 
@@ -137,11 +139,11 @@ public class ViewCreateUpdateMember {
 	 * @param personalNumber Member's personal number
 	 * @return The member's information as a String or null if the member has not been found. Returned member string will in the form of: "id, name, personalNumber, numberOfBoats"
 	 */
-	public static String getMemberInfo(String personalNumber) {
+	public String getMemberInfo(String personalNumber) {
 
-		if (Queries.checkPersonalNumber(personalNumber))
+		if (dbConnection.checkPersonalNumber(personalNumber))
 			return null;
-		Member member = Queries.getMember(personalNumber);
+		Member member = dbConnection.getMember(personalNumber);
 		String s = "";
 		s += member.getMemberId();
 		s += ", ";
@@ -160,10 +162,10 @@ public class ViewCreateUpdateMember {
 	 * @param personalNumber Member's personal number
 	 * @return Member's name or null if the member has not been found.
 	 */
-	public static String getMemberName(String personalNumber) {
-		if (Queries.checkPersonalNumber(personalNumber))
+	public String getMemberName(String personalNumber) {
+		if (dbConnection.checkPersonalNumber(personalNumber))
 			return null;
-		Member member = Queries.getMember(personalNumber);
+		Member member = dbConnection.getMember(personalNumber);
 		return member.getName();
 	}
 
@@ -172,13 +174,13 @@ public class ViewCreateUpdateMember {
 	 * @param personalNumber Member's personal number
 	 * @return true if the member has been removed, false otherwise.
 	 */
-	public static boolean deleteMember(String personalNumber) {
+	public boolean deleteMember(String personalNumber) {
 
-		if (Queries.checkPersonalNumber(personalNumber))
+		if (dbConnection.checkPersonalNumber(personalNumber))
 			return false;
 
-		Member member = Queries.getMember(personalNumber);
-		return Queries.deleteMember(member);
+		Member member = dbConnection.getMember(personalNumber);
+		return dbConnection.deleteMember(member);
 	}
 
 

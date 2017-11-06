@@ -20,6 +20,7 @@ public class Boats {
 	
 	private static final double maxLength = 10000;
 	private MainScreen mainScreen;
+	private ViewCreateUpdateBoat boatController = new ViewCreateUpdateBoat();
 	
 	public Boats(MainScreen mainScreen) {
 		this.mainScreen = mainScreen;
@@ -76,7 +77,7 @@ public class Boats {
 		
 		else {
 			
-			String[] boatTypes = ViewCreateUpdateBoat.getBoatTypes();
+			String[] boatTypes = boatController.getBoatTypes();
 			boolean validated=false;;
 			
 			for (int i=0; i<boatTypes.length; i++) {
@@ -142,20 +143,22 @@ public class Boats {
 	
 	// Returns a prettified boat string. 
 	private String getPrettyBoatById(int id) {
-		String boat = ViewCreateUpdateBoat.getBoatById(id);
+		String boat = boatController.getBoatById(id);
 		String[] splitted = boat.split(", ");
 		boat = "Boat Id: ";
 		boat += splitted[0];
 		boat += ", Type: ";
 		boat += splitted[1];
 		boat += ", Length: ";
+		boat += splitted[2];
+		boat += " ";
 		boat += "meters";
 		return boat;
 	}
 	
 	// Prettifies the boats strings for the selceted personal number
 	String[] getPrettyBoats() {
-		String[] boats = ViewCreateUpdateBoat.getBoats(mainScreen.selectedPersonalNumber);
+		String[] boats = boatController.getBoats(mainScreen.selectedPersonalNumber);
 		if (boats == null)
 			return null;
 		String[] prettyBoats = new String[boats.length];
@@ -167,6 +170,8 @@ public class Boats {
 			prettyBoats[i] += ", Type: ";
 			prettyBoats[i] += splitted[1];
 			prettyBoats[i] += ", Length: ";
+			prettyBoats[i] += splitted[2];
+			prettyBoats[i] += " ";
 			prettyBoats[i] += "meters";
 		}
 		return prettyBoats;
@@ -253,7 +258,7 @@ public class Boats {
 	void addBoat() {
 		
 		System.out.println("\n------------------------------------------------\nPlease choose boat's Type or type back to go back:");
-		String[] boatTypes = ViewCreateUpdateBoat.getBoatTypes();
+		String[] boatTypes = boatController.getBoatTypes();
 		for (int i=0; i<boatTypes.length; i++) {
 			String s = "" + (i+1) + ") " + boatTypes[i];
 			System.out.println(s);
@@ -299,7 +304,7 @@ public class Boats {
 		
 		
 		int typeChoice = Integer.parseInt(validatedInput);
-		ViewCreateUpdateBoat.addBoat(mainScreen.selectedPersonalNumber, typeChoice, length);
+		boatController.addBoat(mainScreen.selectedPersonalNumber, typeChoice, length);
 		System.out.println("Boat has been successfully added!\n-----------------------------------------------------------");
 		
 	}
@@ -426,7 +431,7 @@ public class Boats {
 			}
 		}
 		
-		if (ViewCreateUpdateBoat.updateBoatLength(mainScreen.selectedBoatId, length))
+		if (boatController.updateBoatLength(mainScreen.selectedBoatId, length))
 			System.out.println("Boat length has been updated successfully !\n---------------------------------------------------");
 		
 	}
@@ -436,7 +441,7 @@ public class Boats {
 	 */
 	void updateBoatType() {
 		System.out.println("\n------------------------------------------------\nPlease choose boat's Type or type back to go back:");
-		String[] boatTypes = ViewCreateUpdateBoat.getBoatTypes();
+		String[] boatTypes = boatController.getBoatTypes();
 		for (int i=0; i<boatTypes.length; i++) {
 			String s = "" + (i+1) + ") " + boatTypes[i];
 			System.out.println(s);
@@ -458,7 +463,7 @@ public class Boats {
 		String newType = boatTypes[index];
 		
 		
-		if (ViewCreateUpdateBoat.updateBoatType(mainScreen.selectedBoatId, newType))
+		if (boatController.updateBoatType(mainScreen.selectedBoatId, newType))
 			System.out.println("Boat type has been updated successfully !");
 	}
 	
@@ -485,7 +490,7 @@ public class Boats {
 		}
 		
 		if (validatedInput.equalsIgnoreCase("y")) {
-			boolean b = ViewCreateUpdateBoat.removeBoat(mainScreen.selectedBoatId);
+			boolean b = boatController.removeBoat(mainScreen.selectedBoatId);
 			if (b)
 				System.out.println("Boat has been successfully removed !!!\n----------------------------------------------------");
 		}
