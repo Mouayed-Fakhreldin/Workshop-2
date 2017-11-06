@@ -148,6 +148,17 @@ public class Member {
 	 * @return an ArrayList of the member's boats
 	 */
 	public ArrayList<Boat> getBoatList() {
+		Member member = new Member(this.name, this.personalNumber);
+		member.memberId = this.memberId;
+		member.setStored(this.stored);
+		
+		ArrayList<Boat> boatList = new ArrayList<Boat>();
+		for (Boat boat:this.boatList) {
+			boatList.add(new Boat(member, boat.getType(), boat.getLength()));
+		}
+		
+		for (Boat boat:boatList)
+			member.addBoat(boat);
 		return boatList;
 	}
 	

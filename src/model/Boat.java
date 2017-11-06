@@ -15,7 +15,7 @@ public class Boat {
 	private int boatId;
 	private BoatType type;
 	private double length;
-	private Member owner;
+	final private Member owner;
 	private boolean stored;
 	
 	public enum BoatType {
@@ -140,6 +140,7 @@ public class Boat {
 		return this.boatId== boatToCompare.boatId;
 	}
 	
+	@Override
 	public String toString(){
 		String output="Boat id = "+this.boatId +", Boat Type = "+this.type+", Boats Length = "+ this.length;
 		return output;
