@@ -145,7 +145,7 @@ public class Member {
 
 	/**
 	 * Gets the member's registered boats.
-	 * @return an ArrayList of the member's boats
+	 * @return an ArrayList of the member's boats (deep copy of the boats list)
 	 */
 	public ArrayList<Boat> getBoatList() {
 		Member member = new Member(this.name, this.personalNumber);

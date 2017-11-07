@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 /**
- * A class that connects the java code to the SQL database to facilitate Queries.
+ * A class doing all the operations for updating and retreiving information from the database
  * @author Mouayed Fakhreldin
  * @author Abdilrahman Duale
  * @author Genet Shiferaw
@@ -20,6 +20,7 @@ public class DBConnection {
 	private Connection connection = null;
 	private Statement statement = null;
 	
+	// Initiazlize the connection with the mysql database.
 	private void initialize() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
