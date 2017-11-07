@@ -207,7 +207,7 @@ public class Boats {
 			int n = 0;
 			
 			try {
-				 n = Integer.parseInt(UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkChoice", MainScreen.args), mainScreen.scanner, this));
+				 n = Integer.parseInt(mainScreen.validatedInput("Choice: ", Boats.class.getMethod("checkChoice", MainScreen.args), mainScreen.scanner, this));
 			} 
 			
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -268,7 +268,7 @@ public class Boats {
 		
 		String validatedInput = "";
 		try {
-			validatedInput = UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkTypeChoice", MainScreen.args), mainScreen.scanner, this);
+			validatedInput = mainScreen.validatedInput("Choice: ", Boats.class.getMethod("checkTypeChoice", MainScreen.args), mainScreen.scanner, this);
 		} 
 		
 		catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -333,7 +333,7 @@ public class Boats {
 			
 			String chosenBoat = "";
 			try {
-				chosenBoat = UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkBoatChoice", MainScreen.args), mainScreen.scanner, this);
+				chosenBoat = mainScreen.validatedInput("Choice: ", Boats.class.getMethod("checkBoatChoice", MainScreen.args), mainScreen.scanner, this);
 			} 
 			
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -378,7 +378,7 @@ public class Boats {
 			String choice = "";
 			
 			try {
-				choice = UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkUpdateChoice", MainScreen.args), mainScreen.scanner, this);
+				choice = mainScreen.validatedInput("Choice: ", Boats.class.getMethod("checkUpdateChoice", MainScreen.args), mainScreen.scanner, this);
 			} 
 			
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -451,7 +451,7 @@ public class Boats {
 		
 		String validatedInput = "";
 		try {
-			validatedInput = UtilClass.validatedInput("Choice: ", Boats.class.getMethod("checkTypeChoice", MainScreen.args), mainScreen.scanner, this);
+			validatedInput = mainScreen.validatedInput("Choice: ", Boats.class.getMethod("checkTypeChoice", MainScreen.args), mainScreen.scanner, this);
 		} 
 		
 		catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -481,7 +481,7 @@ public class Boats {
 		String validatedInput = "";
 		
 		try {
-			validatedInput = UtilClass.validatedInput(confirmQuestion, UtilClass.class.getMethod("checkYesNoChoice", MainScreen.args), mainScreen.scanner, null);
+			validatedInput = mainScreen.validatedInput(confirmQuestion, MainScreen.class.getMethod("checkYesNoChoice", MainScreen.args), mainScreen.scanner, mainScreen);
 		} 
 		
 		catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException

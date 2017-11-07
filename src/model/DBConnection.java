@@ -25,7 +25,6 @@ public class DBConnection {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Scanner scanner = new Scanner(DBConnection.class.getResourceAsStream("UserAndPassword.txt"));
-			System.out.println("Test Output");
 			String DB_USER = "";
 			String DB_PASSWORD = "";
 			if (scanner.hasNextLine())

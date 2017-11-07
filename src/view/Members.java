@@ -17,13 +17,11 @@ import controller.ViewCreateUpdateMember;
 public class Members {
 	
 	private MainScreen mainScreen;
-	private Boats boats;
 	private ViewCreateUpdateMember memberController = new ViewCreateUpdateMember();
 	
 	
-	public Members(MainScreen mainScreen, Boats boats) {
+	public Members(MainScreen mainScreen) {
 		this.mainScreen = mainScreen;
-		this.boats = boats;
 	}
 	
 	/**
@@ -114,14 +112,14 @@ public class Members {
 		
 		try {
 			
-			name = UtilClass.validatedInput("New member's name (or type back to go back to main menu)", ViewCreateUpdateMember.class.getMethod("checkName", MainScreen.args), mainScreen.scanner, memberController);
+			name = mainScreen.validatedInput("New member's name (or type back to go back to main menu)", ViewCreateUpdateMember.class.getMethod("checkName", MainScreen.args), mainScreen.scanner, memberController);
 			if (name.equalsIgnoreCase("back")) {
 				System.out.println("------------------------------------------------");
 				return;
 			}
 				
 			
-			personalNumber = UtilClass.validatedInput("New member's personal number (or type back to go back to main menu)", Members.class.getMethod("checkPersonalNumberCreate", MainScreen.args), mainScreen.scanner, this);
+			personalNumber = mainScreen.validatedInput("New member's personal number (or type back to go back to main menu)", Members.class.getMethod("checkPersonalNumberCreate", MainScreen.args), mainScreen.scanner, this);
 			if (personalNumber.equalsIgnoreCase("back")) {
 				System.out.println("------------------------------------------------");
 				return;
@@ -146,7 +144,7 @@ public class Members {
 		String choice = "";
 		System.out.println("\n1) Compact List\n2) Verbose List");
 		try {
-			choice = UtilClass.validatedInput("Choice (or type back to go back to main menu)", Members.class.getMethod("checkListChoice", MainScreen.args), mainScreen.scanner, this);
+			choice = mainScreen.validatedInput("Choice (or type back to go back to main menu)", Members.class.getMethod("checkListChoice", MainScreen.args), mainScreen.scanner, this);
 			if (choice.equalsIgnoreCase("back"))
 				return;
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -195,7 +193,7 @@ public class Members {
 				builder.append(s[3]);
 				System.out.println(builder.toString());
 				this.mainScreen.selectedPersonalNumber = s[2];
-				String[] boats = this.boats.getPrettyBoats();
+				String[] boats = this.mainScreen.boats.getPrettyBoats();
 				if (boats != null)	
 					for (int i=0; i<boats.length; i++)
 						System.out.println(boats[i]);
@@ -211,7 +209,7 @@ public class Members {
 	void searchMember() {
 		
 		try {
-			mainScreen.selectedPersonalNumber = UtilClass.validatedInput("Input member's personal number (or type back to go back to main menu)", Members.class.getMethod("checkSearchMemberInput", MainScreen.args), mainScreen.scanner, this);
+			mainScreen.selectedPersonalNumber = mainScreen.validatedInput("Input member's personal number (or type back to go back to main menu)", Members.class.getMethod("checkSearchMemberInput", MainScreen.args), mainScreen.scanner, this);
 			if (mainScreen.selectedPersonalNumber.equalsIgnoreCase("back"))
 				return;
 		} 
@@ -252,7 +250,7 @@ public class Members {
 			String choice = "";
 			
 			try {
-				choice = UtilClass.validatedInput("Choice: ", Members.class.getMethod("checkChoice", MainScreen.args), mainScreen.scanner, this);
+				choice = mainScreen.validatedInput("Choice: ", Members.class.getMethod("checkChoice", MainScreen.args), mainScreen.scanner, this);
 			} 
 			
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
@@ -262,10 +260,10 @@ public class Members {
 						
 			switch (choice) {
 				case "1":
-					boats.viewBoatsList();
+					mainScreen.boats.viewBoatsList();
 					break;
 				case "2":
-					boats.updateBoats();
+					mainScreen.boats.updateBoats();
 					break;
 				case "3":
 					updateName();
@@ -293,7 +291,7 @@ public class Members {
 		String newName = "";
 		
 		try {
-			newName = UtilClass.validatedInput("New member's name (or type back to go back to the previous menu)", ViewCreateUpdateMember.class.getMethod("checkName", MainScreen.args), mainScreen.scanner, memberController);
+			newName = mainScreen.validatedInput("New member's name (or type back to go back to the previous menu)", ViewCreateUpdateMember.class.getMethod("checkName", MainScreen.args), mainScreen.scanner, memberController);
 			if (newName.equalsIgnoreCase("back"))
 				return;
 		} 
@@ -319,7 +317,7 @@ public class Members {
 		String validatedInput = "";
 		
 		try {
-			validatedInput = UtilClass.validatedInput(confirmQuestion, UtilClass.class.getMethod("checkYesNoChoice", MainScreen.args), mainScreen.scanner, null);
+			validatedInput = mainScreen.validatedInput(confirmQuestion, MainScreen.class.getMethod("checkYesNoChoice", MainScreen.args), mainScreen.scanner, mainScreen);
 		} 
 		
 		catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
